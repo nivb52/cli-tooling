@@ -8,22 +8,17 @@ function main(config) {
   const services = {
     name: 'value',
     message: 'choose service',
-    choices: folders.map((folder_name) => ({
-      name: folder_name,
-      value: folder_name,
-    })),
-    // result(names) {
-    //   return this.map(names);
-    // },
+    choices: folders,
+    multiple: true,
   };
-  const { MultiSelect, Toggle } = require('enquirer');
-  const selectServicesPrompt = new MultiSelect(services);
+  const { AutoComplete, Toggle } = require('enquirer');
+  const selectServicesPrompt = new AutoComplete(services);
   const errors = [],
     success = [];
   selectServicesPrompt
     .run()
     .then((services_names_to_build) => {
-      // debug(service_name_and_path);
+      debug(services_names_to_build);
       const service_path_and_version = [];
       for (let folder_name of services_names_to_build) {
         const package_json_file = fs.readFileSync(
@@ -42,32 +37,33 @@ function main(config) {
             errors.push({ folder_name: err });
           }
         }
-
-        const confimBuildPrompt = new Toggle({
-          message: 'Do you want to docker build all those services ?',
-          enabled: 'Yep',
-          disabled: 'Nope',
-        });
-        confimBuildPrompt.run().then((answer) => {
-          if (!answer) {
-            print('see you some other time');
-            return;
-          }
-          service_path_and_version.map((ser) => print(ser));
-          //TODO: build the docker command
-          // let the user option to edit the commant
-          // exec the command
-
-          // print('Answer:', package_json_file);
-        });
       }
+
+      const confimBuildPrompt = new Toggle({
+        message: 'Do you want to docker build all those services ?',
+        enabled: 'Yep',
+        disabled: 'Nope',
+      });
+      confimBuildPrompt.run().then((answer) => {
+        if (!answer) {
+          print('see you some other time');
+          return;
+        }
+        service_path_and_version.map((ser) => print(ser));
+        //TODO: build the docker command
+        // let the user option to edit the commant
+        // exec the command
+
+        // print('Answer:', package_json_file);
+      });
+    })
+    .then((res) => {
+      print('those builds faild: ');
+      print(errors);
+      print('those builds passed: ');
+      print(success);
     })
     .catch(console.error);
-
-  print('those builds faild: ');
-  print(errors);
-  print('those builds passed: ');
-  print(success);
 }
 
 module.exports = main;
