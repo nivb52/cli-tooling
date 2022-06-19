@@ -18,7 +18,8 @@ function main(config) {
   };
   const { MultiSelect, Toggle } = require('enquirer');
   const selectServicesPrompt = new MultiSelect(services);
-  const errors = [];
+  const errors = [],
+    success = [];
   selectServicesPrompt
     .run()
     .then((services_names_to_build) => {
@@ -62,6 +63,11 @@ function main(config) {
       }
     })
     .catch(console.error);
+
+  print('those builds faild: ');
+  print(errors);
+  print('those builds passed: ');
+  print(success);
 }
 
 module.exports = main;
