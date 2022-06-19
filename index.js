@@ -1,4 +1,7 @@
+const config = require('./config.js');
+
 globalThis.print = console.log;
+globalThis.debug = config.debug ? console.log : () => {};
 
 const tasks_choices = [
   {
@@ -20,6 +23,6 @@ prompt
   .then((answer) => {
     console.log('Answer:', answer);
     const task_main_file = require(`./${[answer]}/index.js`);
-    task_main_file();
+    task_main_file(config);
   })
   .catch(console.error);
