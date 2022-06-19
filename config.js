@@ -1,4 +1,4 @@
 module.exports = {
-  services_path: './some_demo_project_folder',
+  services_path: './mocks/some_demo_project_folder',
   debug: true,
 };
