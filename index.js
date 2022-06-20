@@ -18,11 +18,15 @@ const prompt = new Select({
   choices: tasks_choices,
 });
 
-prompt
-  .run()
-  .then((answer) => {
-    console.log('Answer:', answer);
-    const task_main_file = require(`./${[answer]}/index.js`);
-    task_main_file(config);
-  })
-  .catch(console.error);
+function main() {
+  prompt
+    .run()
+    .then((answer) => {
+      console.log('Answer:', answer);
+      const task_main_file = require(`./${[answer]}/index.js`);
+      task_main_file(config);
+    })
+    .catch(console.error);
+}
+
+main();
