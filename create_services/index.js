@@ -19,12 +19,12 @@ function main(config) {
   const Enquirer = require('enquirer');
   const enquirer = new Enquirer();
 
-  const selectServicesPrompt = new Enquirer.AutoComplete(services);
   const errors = [],
     success = [];
+  const service_path_and_version = [];
+  const selectServicesPrompt = new Enquirer.AutoComplete(services);
   selectServicesPrompt.run().then(async (services_names_to_build) => {
     debug(services_names_to_build);
-    const service_path_and_version = [];
     for (let folder_name of services_names_to_build) {
       const package_json_file = fs.readFileSync(
         path.join(config.services_path, folder_name, 'package.json'),
