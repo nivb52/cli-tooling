@@ -44,40 +44,39 @@ function main(config) {
       }
     }
 
-    const confimBuildPrompt = new Enquirer.Toggle({
-      message: 'Ready to build docker for all those services ?',
-      enabled: 'Yes',
-      disabled: 'No',
-    });
+    const isTagByBranch = {
+      type: 'select',
+      message:
+        'Do you want to tag it with the branch (require config of the root) ?',
+      choices: ['Yes', 'No'],
+    };
 
-    confimBuildPrompt.run().then(async (answer) => {
-      if (!answer) {
-        print('see you some other time');
-        return;
-      }
+    const is_branch_in_tag_name = await enquirer.prompt(isTagByBranch);
+    let branch_name = '';
+    if (is_branch_in_tag_name) {
+      branch_name = await getBranchName(config.project_root, enquirer);
+    }
+    print(branch_name);
+    print('those builds passed: ');
+    print(success);
 
-      const isTagByBranch = {
-        type: 'select',
-        message:
-          'Do you want to tag it with the branch (require config of the root) ?',
-        choices: ['Yes', 'No'],
-      };
+    //TODO: build the docker command
+    // SHOW THE OUTPUT BEFORE BUILD AND WAIT CONFIRMATION
+    // let the user option to edit the commant
+    // exec the command
 
-      const is_branch_in_tag_name = await enquirer.prompt(isTagByBranch);
-      let branch_name = '';
-      if (is_branch_in_tag_name) {
-        branch_name = await getBranchName(config.project_root, enquirer);
-      }
-      print(branch_name);
-      print('those builds passed: ');
-      print(success);
+    // WAIT BUILD CONFIRMATION
+    // const confimBuildPrompt = {
+    //   type: 'select',
+    //   message: 'Ready to build docker for all those services ?',
+    //   choices: ['Yes', 'No'],
+    // };
 
-      //TODO: build the docker command
-      // let the user option to edit the commant
-      // exec the command
-
-      // print('Answer:', package_json_file);
-    });
+    // is_confim_buuild_docker = await enquirer.prompt(confimBuildPrompt)
+    // if (!is_confim_buuild_docker) {
+    //   print('see you some other time');
+    //   return;
+    // }
   });
 }
 
