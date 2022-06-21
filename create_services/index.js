@@ -45,7 +45,7 @@ function main(config) {
     }
 
     const confimBuildPrompt = new Enquirer.Toggle({
-      message: 'Do you want to docker build all those services ?',
+      message: 'Ready to build docker for all those services ?',
       enabled: 'Yes',
       disabled: 'No',
     });
